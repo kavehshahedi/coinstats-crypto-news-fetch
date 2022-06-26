@@ -8,7 +8,7 @@ const getNews = () => {
     News.getNews().then(news => {
         for (let i = 0; i < news.length; i++)
             setTimeout(() => Bot.sendNews(news[i].title, news[i].description, news[i].source, news[i].imgURL, news[i].link),
-                i * parseInt(process.env.SEND_DELAY) * 60 * 10);
+                i * parseInt(process.env.SEND_DELAY) * 60 * 1000);
     }).catch(error => { console.log(error, Date.now()) });
 }
 
