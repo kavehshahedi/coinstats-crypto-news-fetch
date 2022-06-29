@@ -2,6 +2,8 @@ const axios = require('axios').default;
 
 const News = require('../models/news');
 
+const config = require('../config.json');
+
 module.exports.getNews = () => {
     return new Promise((resolve, reject) => {
         axios.get('https://api.coinstats.app/public/v1/news').then(async response => {
@@ -41,20 +43,33 @@ const isValidNews = news => {
         news.source !== undefined &&
         news.imgURL !== undefined &&
         news.description.length > 0 &&
-        !['&lt;', '&gt;', '&amp;', '&quot;', '&apos;', '&nbsp;'].some(char => news.description.includes(char)) &&
-        ['.png', '.jpg', '.jpeg', '.gif'].some(ext => news.imgURL.includes(ext)) &&
-        !['cryptobenelux', 'cryptopost', 'reddit', 'coingape'].some(source => String(news.source).toLowerCase().includes(source));
+        !config.bannedItems.bannedCharacters.some(char => news.description.includes(char)) &&
+        !config.bannedItems.bannedSources.some(source => String(news.source).toLowerCase().includes(source)) &&
+        !config.bannedItems.bannedImageSources.some(source => String(news.imgURL).toLowerCase().includes(source)) &&
+        ['.png', '.jpg', '.jpeg', '.gif'].some(ext => news.imgURL.includes(ext));
 }
 
 const fixText = text => {
     text = String(text)
-        .replace('&#8216;', '\'')
-        .replace('&#8217;', '\'')
-        .replace('&#8220;', '\"')
-        .replace('&#8221;', '\"')
-        .replace('&#8230;', '...')
-        .replace('&#8211;', '-')
-        .replace('&#8212;', '-')
+        .replace(/(&#8216;)/g, '\'')
+        .replace(/(&#8217;)/g, '\'')
+        .replace(/(&#8220;)/g, '\"')
+        .replace(/(&#8221;)/g, '\"')
+        .replace(/(&#8230;)/g, '...')
+        .replace(/(&#8211;)/g, '-')
+        .replace(/(&#8212;)/g, '-')
+        .replace(/(&#x201C;)/g, '\"')
+        .replace(/(&#x201D;)/g, '\"')
+        .replace(/(&#124;)/g, '|')
+        .replace(/(&rsquo;)/g, '\'')
+        .replace(/(&#039;)/g, '\'')
+        .replace(/(&#160;)/g, ' ')
+        .replace(/(&#x2019;)/g, '\'')
+        .replace(/(&#x2018;)/g, '\'')
+        .replace(/(&#x2013;)/g, '-')
+        .replace(/(&#x2014;)/g, '-')
+        .replace(/(&#38;)/g, '&')
+        .replace(/(&#x00A0;)/g, ' ')
         .trim();
 
     return text;

@@ -2,12 +2,14 @@ const { Telegraf } = require('telegraf');
 
 const Bot = new Telegraf(process.env.BOT_TOKEN);
 
+const config = require('../config.json');
+
 Bot.catch((err, ctx) => {
     return;
 })
 
 module.exports.sendNews = (title, description, source, imageUrl, link) => {
-    const message = `🔸*${title}*\n\n${description}\n\n[Read The Full Article](${link})\nSource: ${source}\n\n@RCryptoNews`
+    const message = `🔸*${title}*\n\n${description}\n\n[Read The Full Article](${link})\nSource: ${source}\n\n${config.botInfo.channelId}`
     try {
         Bot.telegram.sendPhoto(process.env.CHAT_ID, { url: imageUrl }, { caption: message, parse_mode: 'Markdown' });
     } catch (err) { }

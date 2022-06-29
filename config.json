@@ -1,0 +1,28 @@
+{
+    "app": {
+        "fetchInterval": 5,
+        "publishDelay": 1
+    },
+    "botInfo": {
+        "channelId": "@RCryptoNews"
+    },
+    "bannedItems": {
+        "bannedSources": [
+            "cryptobenelux",
+            "cryptopost",
+            "reddit",
+            "coingape"
+        ],
+        "bannedCharacters": [
+            "&lt;",
+            "&gt;",
+            "&amp;",
+            "&quot;",
+            "&apos;",
+            "&nbsp;"
+        ],
+        "bannedImageSources": [
+            "blog.chain.link"
+        ]
+    }
+}
